@@ -20,7 +20,7 @@ import cloudscraper
 import asyncio
 import httpx
 
-token = "7879139068:AAFOhOXb3fW4GVY05-denGDreUMrsjjdEow" 
+token = "7879139068:AAGUKjpOGuKtMCXHTsWMWSdIs83Sn_syu9Y" 
 bot = telebot.TeleBot(token, parse_mode="HTML")
 
 owners = ["6821529235"]
