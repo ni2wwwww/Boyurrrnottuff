@@ -27,7 +27,7 @@ owners = ["6821529235"]
 
 # Gateway configurations
 DEVICE_FINGERPRINT = "noXc7Zv4NmOzRNIl3zmSernrLMFEo05J0lh73kdY46cUpMIuLjBQbCwQygBbMH4t4xfrCkwWutyony5DncDTRX0e50ULyy2GMgy2LUxAwaxczwLNJYzwLXqTe7GlMxqzCo7XgsfxKEWuy6hRjefIXYKVOJ23KBn6..."
-BROWSERLESS_API_KEY = "SBcoSKBXWfHL3w9db746bf208909f3dac7fc35e73c" 
+BROWSERLESS_API_KEY = "2SnMWeeEB7voHxK22f5ee7ff5e5d665176f02d0b9a566358d" 
 
 # Store user gateway configurations
 user_gateway_settings = {}
