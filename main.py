@@ -76,7 +76,7 @@ def get_dynamic_session_token():
     if not BROWSERLESS_API_KEY or BROWSERLESS_API_KEY == "YOUR_API_KEY_HERE":
         return None, "Browserless.io API Key not set."
 
-    browser_ws_endpoint = f'https://production-sfo.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
+    browser_ws_endpoint = f'wss://production-sfo.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
     try:
         with sync_playwright() as p:
             browser = p.chromium.connect_over_cdp(browser_ws_endpoint, timeout=60000)
