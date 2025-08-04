@@ -97,7 +97,7 @@ def handle_redirect_and_get_result(redirect_url):
     if not BROWSERLESS_API_KEY or BROWSERLESS_API_KEY == "YOUR_API_KEY_HERE":
         return "Browserless.io API Key not set."
 
-    browser_ws_endpoint = f'wss://chrome.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
+    browser_ws_endpoint = f'wss://production-sfo.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
     try:
         with sync_playwright() as p:
             browser = p.chromium.connect_over_cdp(browser_ws_endpoint, timeout=60000)
@@ -122,7 +122,7 @@ def extract_merchant_data_with_playwright(site_url):
     if not BROWSERLESS_API_KEY or BROWSERLESS_API_KEY == "YOUR_API_KEY_HERE":
         return None, None, None, None, "Browserless.io API Key not set."
 
-    browser_ws_endpoint = f'wss://chrome.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
+    browser_ws_endpoint = f'wss://production-sfo.browserless.io?token={BROWSERLESS_API_KEY}&timeout=60000'
     try:
         with sync_playwright() as p:
             browser = p.chromium.connect_over_cdp(browser_ws_endpoint, timeout=60000)
@@ -290,7 +290,7 @@ def perform_braintree_check(session, site_config, card_data):
             ('client_token_nonce":', ','),
             ('client_token_nonce":"', '",'),
             ('client_token_nonce&quot;:&quot;', '&quot;'),
-            
+
             # Braintree specific patterns
             ('braintree_client_token":"', '"'),
             ('wc_braintree_client_token_nonce":"', '"'),
@@ -298,7 +298,7 @@ def perform_braintree_check(session, site_config, card_data):
             ('bt_client_token":"', '"'),
             ('clientToken":"', '"'),
             ('client-token":"', '"'),
-            
+
             # Additional common patterns
             ('"client_token":"', '"'),
             ("'client_token':'", "'"),
@@ -306,15 +306,15 @@ def perform_braintree_check(session, site_config, card_data):
             ('data-client-token="', '"'),
             ('clientToken: "', '"'),
             ("clientToken: '", "'"),
-            
+
             # WooCommerce patterns
             ('wc_braintree_params', '"client_token":"', '"'),
             ('wc-braintree-credit-card-js-extra', '"client_token":"', '"'),
-            
+
             # Form and CSRF patterns
             ('name="client_token_nonce" value="', '"'),
             ('id="client_token_nonce" value="', '"'),
-            
+
             # Script tag patterns
             ('"clientTokenNonce":"', '"'),
             ("'clientTokenNonce':'", "'"),
@@ -341,7 +341,7 @@ def perform_braintree_check(session, site_config, card_data):
                 r'clientToken["\']?\s*[:=]\s*["\']([a-zA-Z0-9]+)["\']',
                 r'client[_-]?token[_-]?nonce["\']?\s*[:=]\s*["\']([a-zA-Z0-9]+)["\']',
             ]
-            
+
             for pattern in regex_patterns:
                 if not client_token:
                     match = re.search(pattern, payment_page_req.text, re.IGNORECASE)
@@ -357,27 +357,27 @@ def perform_braintree_check(session, site_config, card_data):
             ('woocommerce-add-payment-method-nonce" value="', '"'),
             ('add-payment-method-nonce" value="', '"'),
             ('payment-method-nonce" value="', '"'),
-            
+
             # JSON/JavaScript patterns
             ('"woocommerce-add-payment-method-nonce":"', '"'),
             ("'woocommerce-add-payment-method-nonce':'", "'"),
             ('"addPaymentMethodNonce":"', '"'),
             ("'addPaymentMethodNonce':'", "'"),
-            
+
             # WooCommerce specific patterns
             ('wc-braintree-add-payment-method-nonce" value="', '"'),
             ('braintree-add-payment-nonce" value="', '"'),
             ('wc_braintree_client_token_nonce" value="', '"'),
-            
+
             # Form data patterns
             ('name="_wpnonce" value="', '"'),
             ('name="woocommerce-add-payment-method-nonce" value="', '"'),
-            
+
             # Script tag patterns
             ('"_wpnonce":"', '"'),
             ('"nonce":"', '"'),
             ("'nonce':'", "'"),
-            
+
             # Additional patterns from working sites
             ('data-nonce="', '"'),
             ('nonce: "', '"'),
@@ -405,7 +405,7 @@ def perform_braintree_check(session, site_config, card_data):
                 r'_wpnonce["\']?\s*[:=]\s*["\']([a-zA-Z0-9]+)["\']',
                 r'nonce["\']?\s*[:=]\s*["\']([a-zA-Z0-9]{10,})["\']',
             ]
-            
+
             for pattern in regex_patterns:
                 if not noncec:
                     match = re.search(pattern, payment_page_req.text, re.IGNORECASE)
@@ -420,7 +420,7 @@ def perform_braintree_check(session, site_config, card_data):
                 r'payment[^"\']*method[^"\']*nonce[^"\']*["\']([a-zA-Z0-9]{10,})["\']',
                 r'add[^"\']*payment[^"\']*nonce[^"\']*["\']([a-zA-Z0-9]{10,})["\']',
             ]
-            
+
             for pattern in final_patterns:
                 if not noncec:
                     match = re.search(pattern, payment_page_req.text, re.IGNORECASE)
@@ -445,7 +445,7 @@ def perform_braintree_check(session, site_config, card_data):
                                 break
                         if client_token:
                             break
-            
+
             # Try alternative extraction for nonce
             if not noncec:
                 soup = BeautifulSoup(payment_page_req.text, 'html.parser')
@@ -460,7 +460,7 @@ def perform_braintree_check(session, site_config, card_data):
                                 break
                         if noncec:
                             break
-            
+
             # If still failed, return detailed error
             if not client_token or not noncec:
                 error_details = []
@@ -468,7 +468,7 @@ def perform_braintree_check(session, site_config, card_data):
                     error_details.append("Client token not found")
                 if not noncec:
                     error_details.append("Nonce not found")
-                
+
                 return {
                     "is_approved": False, 
                     "summary": "DEAD - Setup Failed", 
@@ -601,8 +601,7 @@ def generate_code(message):
             message, 
             f"<b>ð New Redeem Code ð</b>\n\n"
             f"<code>{new_code}</code>\n\n"
-            f"<code>/redeem {new_code}</code>\n"
-            f"Use this code to redeem your access!",
+            f"<code>/redeem {new_code}</code>\nUse this code to redeem your access!",
             parse_mode="HTML"
         )
     else:
@@ -1002,7 +1001,7 @@ def main(message):
 ðð¨ð®ð§ð­ð«ð²: {cn} {emj}
 
 ðð¢ð¦ð: 0 ð¬ððð¨ð§ðð¬
-ðððð­ ðð¨ ðð¡ððð¤: {total - dd - live - ch}
+ððð­ ðð¨ ðð¡ððð¤: {total - dd - live - ch}
 ðð¡ððð¤ðð ðð²: @{username}
 ðð¨ð­ ðð²:  @PROGAMER666YT'''
                 print(last)
@@ -1031,7 +1030,7 @@ def main(message):
 ðð¨ð®ð§ð­ð«ð²: {cn} {emj}
 
 ðð¢ð¦ð: {elapsed_time:.2f} ð¬ððð¨ð§ðð¬
-ðððð­ ðð¨ ðð¡ððð¤: {total - dd - live - ch}
+ððð­ ðð¨ ðð¡ððð¤: {total - dd - live - ch}
 ðð¡ððð¤ðð ðð²: @{username}
 ðð¨ð­ ðð²: @PROGAMER666YT'''
                     send_telegram_notification(msg1)
